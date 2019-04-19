@@ -65,6 +65,14 @@ urlinfo_t *parse_url(char *url)
   }
   printf("parse_url 1.4: hostname - %s\n", hostname);
 
+  if(path == NULL){
+    path = "";
+  }
+
+  if(port == NULL){
+    port = "80";
+  }
+
   urlinfo->hostname = hostname;
   urlinfo->port = port;
   urlinfo->path = path;
@@ -95,12 +103,12 @@ int send_request(int fd, char *hostname, char *port, char *path)
 
   sprintf(request,  "GET /%s HTTP/1.1\n"
                     "Host: %s:%s\n"
-                    "Connection: close", path, hostname, port);
+                    "Connection: keep-alive", path, hostname, port);
 
   printf("send_request 1.1 REQUEST\n%s\n", request);
 
   fd = get_socket(hostname, port);
-  printf("send_request 1.2 SOCKET: %d\n", fd);
+  printf("send_request 1.2\nSOCKET: %d\n", fd);
 
   return send(fd, request, strlen(request), 0);
 
@@ -138,7 +146,6 @@ int main(int argc, char *argv[])
   printf("main 1.3\n");
   while((numbytes = recv(sockfd, buf, BUFSIZE - 1, 0)) > 0){
     printf("main 2.0\n");
-    printf("%s", buf);
   }
   printf("main 1.4\n");
 
