@@ -103,7 +103,7 @@ int send_request(int fd, char *hostname, char *port, char *path)
 
   sprintf(request,  "GET /%s HTTP/1.1\n"
                     "Host: %s:%s\n"
-                    "Connection: keep-alive", path, hostname, port);
+                    "Connection: close\n\n", path, hostname, port);
 
   printf("send_request 1.1 REQUEST\n%s\n", request);
 
