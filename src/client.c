@@ -49,29 +49,25 @@ urlinfo_t *parse_url(char *url)
   ///////////////////
   // IMPLEMENT ME! //
   ///////////////////
-  printf("parse_url 1.0: hostname - %s\n", hostname);
+  // printf("parse_url 1.0: hostname - %s\n", hostname);
   char *divider = strchr(hostname, '/');
   if(divider){
     path = (divider + 1);
-    printf("parse_url 1.1: path - %s\n", path);
+    // printf("parse_url 1.1: path - %s\n", path);
     hostname = strtok(hostname, "/");
+  } else {
+    path = "";
   }
-  printf("parse_url 1.2: hostname - %s\n", hostname);
+  // printf("parse_url 1.2: hostname - %s\n", hostname);
   divider = strchr(hostname, ':');
   if(divider){
     port = (divider + 1);
-    printf("parse_url 1.3: port - %s\n", port);
+    // printf("parse_url 1.3: port - %s\n", port);
     hostname = strtok(hostname, ":");
-  }
-  printf("parse_url 1.4: hostname - %s\n", hostname);
-
-  if(path == NULL){
-    path = "";
-  }
-
-  if(port == NULL){
+  } else {
     port = "80";
   }
+  // printf("parse_url 1.4: hostname - %s\n", hostname);
 
   urlinfo->hostname = hostname;
   urlinfo->port = port;
@@ -99,16 +95,15 @@ int send_request(int fd, char *hostname, char *port, char *path)
   ///////////////////
   // IMPLEMENT ME! //
   ///////////////////
-  printf("send_request 1.0\n");
+  // printf("send_request 1.0\n");
 
   sprintf(request,  "GET /%s HTTP/1.1\n"
                     "Host: %s:%s\n"
                     "Connection: close\n\n", path, hostname, port);
 
-  printf("send_request 1.1 REQUEST\n%s\n", request);
+  // printf("send_request 1.1 REQUEST\n%s\n", request);
 
-  fd = get_socket(hostname, port);
-  printf("send_request 1.2\nSOCKET: %d\n", fd);
+  // printf("send_request 1.2\nSOCKET: %d\n", fd);
 
   return send(fd, request, strlen(request), 0);
 
@@ -135,19 +130,20 @@ int main(int argc, char *argv[])
   ///////////////////
   // IMPLEMENT ME! //
   ///////////////////
-  printf("main 1.0\n");
+  // printf("main 1.0\n");
   urlinfo_t *urlinfo = parse_url(argv[1]);
-  printf("main 1.1\n");
-  printf("urlinfo->hostname: %s\n", urlinfo->hostname);
-  printf("urlinfo->port: %s\n", urlinfo->port);
+  // printf("main 1.1\n");
+  // printf("urlinfo->hostname: %s\n", urlinfo->hostname);
+  // printf("urlinfo->port: %s\n", urlinfo->port);
   sockfd = get_socket(urlinfo->hostname, urlinfo->port);
-  printf("main 1.2\n");
+  // printf("main 1.2\n");
   send_request(sockfd, urlinfo->hostname, urlinfo->port, urlinfo->path);
-  printf("main 1.3\n");
+  // printf("main 1.3\n");
   while((numbytes = recv(sockfd, buf, BUFSIZE - 1, 0)) > 0){
-    printf("main 2.0\n");
+    // printf("main 2.0\n");
+    printf("%s", buf);
   }
-  printf("main 1.4\n");
+  printf("\n");
 
   return 0;
 }
