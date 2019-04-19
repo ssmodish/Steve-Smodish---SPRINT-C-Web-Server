@@ -136,15 +136,11 @@ int main(int argc, char *argv[])
   printf("main 1.2\n");
   send_request(sockfd, urlinfo->hostname, urlinfo->port, urlinfo->path);
   printf("main 1.3\n");
-  recv(sockfd, buf, BUFSIZE, 0);
-  printf("main 1.4\n");
-  while(buf > 0){
+  while((numbytes = recv(sockfd, buf, BUFSIZE - 1, 0)) > 0){
     printf("main 2.0\n");
     printf("%s", buf);
-    printf("main 2.1\n");
-    recv(sockfd, buf, BUFSIZE, 0);
   }
-  printf("main 1.5\n");
+  printf("main 1.4\n");
 
   return 0;
 }
